@@ -11,7 +11,7 @@ const Title = () => {
 
     return (
         <h1>
-            <strong>Questions</strong> to ask <span className="slot-machine">your boyfriend</span>
+            <strong>Questions</strong> to ask <span><ul><li>your boyfriend</li><li>your girlfriend</li><li>your best friend</li></ul></span>
         </h1>
     )
 }

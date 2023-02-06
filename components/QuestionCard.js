@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 
 
 const questions = {
-    question: "Would you rather give 1 million euros to 1 person or 1000 euros to 1000 people?",
+    question: <>Would you rather give 1 million euros to 1 person or 1000&euro; to 1000 people?</>,
     answers: [
         {
             key: 0,
-            value: "1 million to a single person",
+            value: <>1 million &euro; to a single person</>,
             answerCount: 23
         },
         {
             key: 1,
-            value: "1000euros to 1000 people",
+            value: <>1000&euro; to 1000 people</>,
             answerCount: 38
         }
     ],

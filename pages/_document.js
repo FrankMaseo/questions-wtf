@@ -1,16 +1,18 @@
-import { Html, Head, Main, NextScript } from 'next/document'
-import Adsense from '../components/Adsense';
+import { Html, Main, Head, NextScript } from 'next/document'
+import Header from '../components/Header';
 
 
 export default function Document() {
-  return (
-    <Html lang="en">
-      <Head />
-      <body>
-        <Main />
-        <NextScript />
-        <Adsense />
-      </body>
-    </Html>
-  )
+    return (
+        <Html lang="en">
+            <Head>
+                <Header />
+            </Head>
+            <body>
+                <Main />
+                <NextScript />
+
+            </body>
+        </Html>
+    )
 }

@@ -1,0 +1,67 @@
+.question-container {
+    min-height: 400px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    max-width: 100vw;
+}
+
+.question-container h1{
+    max-width: 85%;
+    text-align: center;
+    margin-bottom: 50px
+}
+
+.question-card {
+    border: solid;
+    margin: auto;
+    padding: 4px 4px 4px 4px;
+    max-width: 90%;
+    font-size: large;
+    justify-content: center;
+    display: grid;
+
+}
+
+.question{
+    text-align: center;
+    
+}
+
+.answer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.answer button {
+    width: 250px;
+    max-width: 90%;
+    font-size: inherit;
+    margin: 5px 5px 5px 5px ;
+}
+
+.results {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.results li {
+    min-width: 60%
+}
+
+.new{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 10px
+}
+.new button{
+    width: 150px;
+    min-height: 30px;
+}

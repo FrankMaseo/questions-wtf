@@ -1,0 +1,17 @@
+@keyframes example {
+    0% {
+        transform: translateY(0);
+    }
+
+    5% {
+        transform: translateY(-30px);
+    }
+
+    10% {
+        transform: translateY(0);
+    }
+}
+
+.slot-machine {
+    animation: example 2s linear infinite;
+}

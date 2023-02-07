@@ -1,7 +1,7 @@
-import { ref, onValue } from "@firebase/database";
+import { ref, onValue, get, child } from "@firebase/database";
 import { database } from '../config/firebase';
 import React, { useState, useContext, createContext, useEffect } from 'react';
-
+import updateAnswerCount from '../utils/updateAnswerCount';
 
 const QuestionCard = () => {
 
@@ -10,56 +10,67 @@ const QuestionCard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [questionId, setQuestionId] = useState(0);
     const [displayResults, setDisplayResults] = useState(false);
+    const [answerIndex, setAnswerIndex] = useState(null);
 
     useEffect(() => {
-        
 
         let questionRef = ref(database, 'questions/' + questionId);
+        let questionCountRef = ref(database, 'questionCount');
+
+        onValue(questionCountRef, (snapshot) => {
+            setQuestionCount(snapshot.val());
+        }, {
+            onlyOnce: true
+        });
 
         onValue(questionRef, (snapshot) => {
             setIsLoading(true);
             setQuestion(snapshot.val());
             setIsLoading(false);
         });
-        
-        
+
+
     }, [questionId])
-
-    useEffect(() => {
-
-
-        let questionRef = ref(database, 'questionCount');
-        console.log('questions/' + questionId);
-
-        onValue(questionRef, (snapshot) => {
-            setIsLoading(true);
-            setQuestionCount(snapshot.val());
-            setIsLoading(false);
-        });
-
-
-    },)
-
 
     const displayQuestionResults = () => {
         setDisplayResults(!displayResults)
     }
     const updateQuestionId = () => {
+        updateAnswerCount(questionId, answerIndex, question.answers[answerIndex].answerCount);
         displayQuestionResults();
+        nextQuestion();
+    }
+
+    const nextQuestion = () => {
         setQuestionId(Math.floor(Math.random() * Math.floor(questionCount)));
     }
 
+    const updateAnswerIndex = (indexId) => {
+        setAnswerIndex(indexId);
+    }
 
-    
+
     return (
         //<div className="question-container">
         <>
             {isLoading ?
-                <div className = "question-card">loading</div> :
+                <div className="question-card">loading</div> :
                 <div className="question-card">
                     <QuestionHeader questions={question} />
-                    <QuestionAnswer questions={question} displayResults={displayResults} displayQuestionResults={displayQuestionResults} />
-                    <NextQuestion updateFunction={updateQuestionId} />
+                    <QuestionAnswer
+                        questions={question}
+                        displayResults={displayResults}
+                        displayQuestionResults={displayQuestionResults}
+                        updateAnswerIndex={updateAnswerIndex}
+                        totalAnswers={
+                            question.answers.reduce((total, currentObject) => { return total + currentObject.answerCount }, 0)
+                        }
+                    />
+                    <NextQuestion
+                        updateFunction={updateQuestionId}
+                        skipQuestion={nextQuestion}
+                        displayResults={displayResults}
+                    />
                 </div>
             }
         </>
@@ -68,28 +79,29 @@ const QuestionCard = () => {
 }
 
 const QuestionHeader = (props) => {
-    console.log(props.questions.answers)
     return (
         <span className="question">{props.questions.question}</span>
     );
 }
 
 const QuestionAnswer = (props) => {
-    
 
     const submitAnswer = (e) => {
-        e.preventDefault();
+        //e.preventDefault();
         props.displayQuestionResults();
+        props.updateAnswerIndex(e.target.value);
         //add function coming from props to submit answer to backend
     }
+
 
     return (
         <>
             <div className="questions answer">
                 {
-                    props.questions.answers.map((value) => {
+                    props.questions.answers.map((value, index) => {
                         return (<button
-                            key={value}
+                            key={index}
+                            value={index}
                             onClick={submitAnswer}
                             disabled={props.displayResults}
                         >{value.answer}</button>
@@ -98,30 +110,46 @@ const QuestionAnswer = (props) => {
                 }
 
             </div>
-            
-            <ul className = "results">
+
+            <div className="results">
+                <div style={{width:"100%", marginBottom: "15px"} }>
+                    All answers:
+                </div>
                 {props.displayResults ?
-                    props.questions.answers.map((value) => {
-                        return (<li
-                            key={value}
-                        >{value.answer} : {value.answerCount}</li>
+                    props.questions.answers.map((value, index) => {
+                        return (
+                            <div key={index}>
+                                <strong>{value.answer}</strong>
+                                <span>{(value.answerCount / props.totalAnswers * 100).toFixed(1)}%</span>
+                            </div>
                         );
                     })
                     : null
                 }
-            </ul>
+            </div>
 
         </>
     );
 }
+
 const NextQuestion = (props) => {
 
     const newQuestion = () => {
         props.updateFunction()
     }
+
+    const skipQuestion = () => {
+        props.skipQuestion()
+    }
+
     return (
         <div className="questions new">
-            <button onClick={newQuestion }>New question</button>
+            {
+                props.displayResults ? 
+                    <button onClick={newQuestion}>New question</button> :
+                    <button onClick={skipQuestion}>Skip</button>
+            }
+            
         </div>
     );
 }

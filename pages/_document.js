@@ -8,10 +8,10 @@ export default function Document() {
             <Head>
                 <Header />
             </Head>
+            
             <body>
                 <Main />
                 <NextScript />
-
             </body>
         </Html>
     )

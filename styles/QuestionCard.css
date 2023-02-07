@@ -9,7 +9,7 @@
 }
 
     .question-container h1 {
-        width: 85%;
+        width: 100%;
         text-align: center;
         margin-bottom: 50px;
         
@@ -167,11 +167,20 @@ question-container ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top:10px;
+    margin-bottom: 5px;
 }
 
-.results li {
-    min-width: 60%
+.results div {
+    width: 50%;
+    display: grid;
+    text-align: center
 }
+
+.results div span {
+    font-size: 30px;
+}
+
 
 .new{
     display: flex;
